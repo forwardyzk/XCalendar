@@ -1,6 +1,7 @@
 package com.xqx.xcalendar.calendar.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -135,28 +136,27 @@ public class SelectValidTimeAdapter extends RecyclerView.Adapter<SelectValidTime
                 && endDay.getYear() == selectDayEntity.getYear() && endDay.getMonth() == selectDayEntity.getMonth() && endDay.getDay() == selectDayEntity.getDay()) {
             //开始和结束同一天
             holder.select_ly_day.setBackgroundResource(R.drawable.bg_calendar_time_startend);
-            holder.select_txt_day.setTextColor(context.getResources().getColor(R.color.white));
+            holder.select_txt_day.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
         } else if (startDay.getYear() == selectDayEntity.getYear() && startDay.getMonth() == selectDayEntity.getMonth() && startDay.getDay() == selectDayEntity.getDay()) {
             //开始点
             holder.select_ly_day.setBackgroundResource(R.drawable.bg_calendar_time_start);
-            holder.select_txt_day.setTextColor(context.getResources().getColor(R.color.white));
+            holder.select_txt_day.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
         } else if (endDay.getYear() == selectDayEntity.getYear() && endDay.getMonth() == selectDayEntity.getMonth() && endDay.getDay() == selectDayEntity.getDay()) {
             //结束点
             holder.select_ly_day.setBackgroundResource(R.drawable.bg_calendar_time_end);
-            holder.select_txt_day.setTextColor(context.getResources().getColor(R.color.white));
+            holder.select_txt_day.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
         } else if (!justDayEmpty(startDay) && !justDayEmpty(endDay) && entityToInt(selectDayEntity) >= entityToInt(startDay) && entityToInt(selectDayEntity) <= entityToInt(endDay)) {
             //处于开始和结束时间之间
-            holder.select_ly_day.setBackgroundResource(R.color.bg_color_calendar_blue);
-            holder.select_txt_day.setTextColor(context.getResources().getColor(R.color.white));
+            holder.select_ly_day.setBackgroundResource(R.color.calendar_bg_day_selected_color);
+            holder.select_txt_day.setTypeface(Typeface.SANS_SERIF, Typeface.NORMAL);
         } else {
             if (selectDayEntity.getYear() == mCurrentSystemDay.getYear()
                     && selectDayEntity.getMonth() == mCurrentSystemDay.getMonth()
                     && selectDayEntity.getDay() == mCurrentSystemDay.getDay()) {
                 holder.select_ly_day.setBackgroundResource(R.drawable.bg_calendar_time_system);
-                holder.select_txt_day.setTextColor(context.getResources().getColor(R.color.color_calendar_default));
+                holder.select_txt_day.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
             } else {
-                holder.select_ly_day.setBackgroundResource(R.color.white);
-                holder.select_txt_day.setTextColor(context.getResources().getColor(R.color.color_calendar_default));
+                holder.select_txt_day.setTypeface(Typeface.SANS_SERIF, Typeface.NORMAL);
             }
 
 

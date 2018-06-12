@@ -7,8 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,9 +40,9 @@ public class CalendarView extends LinearLayout {
     }
 
 
-    private ImageButton calendar_back;
+    private TextView calendar_cancle;
     private TextView calendar_show_days;
-    private Button calendar_ok;
+    private TextView calendar_ok;
     private TextView calendar_start_day;          //开始时间
     private TextView calendar_end_day;           //结束时间
 
@@ -53,9 +51,9 @@ public class CalendarView extends LinearLayout {
     private ArrayList<PlanTimeEntity> mYearMonthDatas;
 
     private void initView() {
-        calendar_back = (ImageButton) findViewById(R.id.calendar_back);
+        calendar_cancle = (TextView) findViewById(R.id.calendar_cancle);
         calendar_show_days = (TextView) findViewById(R.id.calendar_show_days);
-        calendar_ok = (Button) findViewById(R.id.calendar_ok);
+        calendar_ok = (TextView) findViewById(R.id.calendar_ok);
         calendar_start_day = (TextView) findViewById(R.id.calendar_start_day);
         calendar_end_day = (TextView) findViewById(R.id.calendar_end_day);
         calendar_recycler = (RecyclerView) findViewById(R.id.calendar_recycler);
@@ -66,7 +64,7 @@ public class CalendarView extends LinearLayout {
 
         calendar_recycler.setLayoutManager(layoutManager);
 
-        calendar_back.setOnClickListener(new OnClickListener() {
+        calendar_cancle.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mlistener) {
@@ -89,8 +87,8 @@ public class CalendarView extends LinearLayout {
                 }
 
                 if (null != mlistener) {
-                    String mStartDayStr = entityToString(mStartDay);
-                    String mEndDayStr = entityToString(mEndDay);
+                    String mStartDayStr = entityToStringFormat(mStartDay);
+                    String mEndDayStr = entityToStringFormat(mEndDay);
                     mlistener.clickOk(mStartDayStr + "~" + mEndDayStr, mStartDayStr, mEndDayStr);
                 }
             }
@@ -213,22 +211,22 @@ public class CalendarView extends LinearLayout {
 
     private void setShowStatAndEndDay(SelectDayEntity startDay, SelectDayEntity endDay) {
         if (justDayEmpty(endDay)) {
-            calendar_end_day.setText("结束" + "\n" + "时间");
+            calendar_end_day.setText("结束日期");
         } else {
-            String s = entityToString(endDay);
+            String s = entityToStringShow(endDay);
             calendar_end_day.setText(s);
         }
         if (justDayEmpty(startDay)) {
-            calendar_start_day.setText("开始" + "\n" + "时间");
+            calendar_start_day.setText("开始日期");
         } else {
-            String s = entityToString(startDay);
+            String s = entityToStringShow(startDay);
             calendar_start_day.setText(s);
         }
 
 
         if (!justDayEmpty(startDay) && !justDayEmpty(endDay)) {
-            String startDayStr = entityToString(startDay);
-            String endDayStr = entityToString(endDay);
+            String startDayStr = entityToStringFormat(startDay);
+            String endDayStr = entityToStringFormat(endDay);
 
             String twoDay = CalendarUtil.getTwoDay(endDayStr, startDayStr);
 
@@ -261,13 +259,23 @@ public class CalendarView extends LinearLayout {
     }
 
     /**
-     * bean类转化为字符串
+     * bean类转化为字符串,格式化:2010-01-04
      *
      * @param dayEntity
      * @return
      */
-    private String entityToString(SelectDayEntity dayEntity) {
+    private String entityToStringFormat(SelectDayEntity dayEntity) {
         return dayEntity.getYear() + "-" + dayEntity.getMonth() + "-" + dayEntity.getDay();
+    }
+
+    /**
+     * bean类转化为字符串,展示,2019年01月06日
+     *
+     * @param dayEntity
+     * @return
+     */
+    private String entityToStringShow(SelectDayEntity dayEntity) {
+        return dayEntity.getYear() + "年" + dayEntity.getMonth() + "月" + dayEntity.getDay() + "日";
     }
 
     /**

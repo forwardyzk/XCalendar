@@ -3,11 +3,11 @@
     android:id="@+id/select_ly_day"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/dp_2"
-    android:layout_marginTop="@dimen/dp_2"
+    android:layout_marginBottom="@dimen/calendar_day_margin_top_bottom"
+    android:layout_marginTop="@dimen/calendar_day_margin_top_bottom"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/dp_6"
-    android:paddingTop="@dimen/dp_6">
+    android:paddingBottom="@dimen/calendar_day_padding_top_bottom"
+    android:paddingTop="@dimen/calendar_day_padding_top_bottom">
 
     <TextView
         android:id="@+id/select_txt_day"
@@ -15,6 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="" />
+        android:text=""
+        android:textColor="@color/calendar_day_default_text_color"
+        android:textSize="@dimen/calendar_day_default_text_size" />
 
 </LinearLayout>

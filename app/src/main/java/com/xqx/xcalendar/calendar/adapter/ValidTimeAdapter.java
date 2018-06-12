@@ -48,7 +48,7 @@ public class ValidTimeAdapter extends RecyclerView.Adapter<ValidTimeViewHolder> 
     @Override
     public void onBindViewHolder(ValidTimeViewHolder holder, int position) {
         PlanTimeEntity planTimeEntity = datas.get(position);
-        holder.plan_time_txt_month.setText(planTimeEntity.getYear() + "--" + planTimeEntity.getMonth());
+        holder.plan_time_txt_month.setText(planTimeEntity.getYear() + "年" + planTimeEntity.getMonth() + "月");
         //得到该月份的第一天
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, planTimeEntity.getYear());          //指定年份

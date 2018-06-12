@@ -1,158 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!--标题栏-->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:padding="@dimen/dp_6">
-        <!--返回按钮-->
-        <ImageButton
-            android:id="@+id/calendar_back"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:background="#0000"
-            android:src="@mipmap/icon_back" />
-
-        <!--标题-->
-        <TextView
-            android:id="@+id/calendar_show_days"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="已选择0天"
-            android:textSize="@dimen/txt_20" />
-
-
-        <!--分配按钮-->
-        <Button
-            android:id="@+id/calendar_ok"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@android:color/transparent"
-            android:orientation="horizontal"
-            android:padding="@dimen/dp_12"
-            android:text="确定"
-            android:textColor="@color/bg_color_calendar_blue"
-            android:textSize="18sp" />
-    </RelativeLayout>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_1"
-        android:background="@color/bg_color_calendar_standard_line" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/bg_color_calendar_standard"
-        android:paddingTop="@dimen/dp_20">
-
-        <TextView
-            android:id="@+id/calendar_start_day"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="87dp"
-            android:layout_marginStart="87dp"
-            android:background="@mipmap/bg_calendar_white_circle"
-            android:gravity="center"
-            android:text="开始\n时间"
-            android:textSize="@dimen/txt_12" />
-
-        <TextView
-            android:id="@+id/calendar_end_day"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="74dp"
-            android:layout_marginRight="74dp"
-            android:background="@mipmap/bg_calendar_white_circle"
-            android:gravity="center"
-            android:text="结束\n时间"
-            android:textSize="@dimen/txt_12" />
-
-    </RelativeLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bg_color_calendar_standard"
-        android:orientation="horizontal"
-        android:paddingBottom="@dimen/dp_10"
-        android:paddingLeft="@dimen/dp_20"
-        android:paddingRight="@dimen/dp_20"
-        android:paddingTop="@dimen/dp_20">
+        android:background="@color/calendar_bg_color_top"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="S" />
+        <!--标题栏-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!--返回按钮-->
+            <TextView
+                android:id="@+id/calendar_cancle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/calendar_title_padding"
+                android:text="取消"
+                android:textColor="@color/calendar_default_text_color"
+                android:textSize="@dimen/calendar_default_text_size" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="M" />
+            <!--标题-->
+            <TextView
+                android:id="@+id/calendar_show_days"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="已选择0天"
+                android:textColor="@color/calendar_default_text_color"
+                android:textSize="@dimen/calendar_default_text_size" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="T" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="W" />
+            <!--分配按钮-->
+            <TextView
+                android:id="@+id/calendar_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:orientation="horizontal"
+                android:padding="@dimen/calendar_title_padding"
+                android:text="确定"
+                android:textColor="@color/calendar_ok_text_color"
+                android:textSize="@dimen/calendar_default_text_size" />
+        </RelativeLayout>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="T" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/calendar_bg_line_color" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="F" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
 
-        <TextView
-            android:layout_width="0dp"
+            <TextView
+                android:id="@+id/calendar_divide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="@dimen/calendar_show_select_margin"
+                android:layout_marginRight="@dimen/calendar_show_select_margin"
+                android:text="--"
+                android:textColor="@color/calendar_default_text_color"
+                android:textSize="@dimen/calendar_default_text_size"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/calendar_start_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@id/calendar_divide"
+                android:gravity="center"
+                android:text="开始日期"
+                android:textColor="@color/calendar_default_text_color"
+                android:textSize="@dimen/calendar_default_text_size"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/calendar_end_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_toRightOf="@id/calendar_divide"
+                android:gravity="center"
+                android:text="结束日期"
+                android:textColor="@color/calendar_default_text_color"
+                android:textSize="@dimen/calendar_default_text_size"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="S" />
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/calendar_week_margin_bottom"
+            android:paddingLeft="@dimen/calendar_week_margin_left_right"
+            android:paddingRight="@dimen/calendar_week_margin_left_right">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="日"
+                android:textColor="@color/calendar_week_text_color"
+                android:textSize="@dimen/calendar_week_text_size" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="一"
+                android:textColor="@color/calendar_week_text_color"
+                android:textSize="@dimen/calendar_week_text_size" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="二"
+                android:textColor="@color/calendar_week_text_color"
+                android:textSize="@dimen/calendar_week_text_size" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="三"
+                android:textColor="@color/calendar_week_text_color"
+                android:textSize="@dimen/calendar_week_text_size" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="四"
+                android:textColor="@color/calendar_week_text_color"
+                android:textSize="@dimen/calendar_week_text_size" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="五"
+                android:textColor="@color/calendar_week_text_color"
+                android:textSize="@dimen/calendar_week_text_size" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="六"
+                android:textColor="@color/calendar_week_text_color"
+                android:textSize="@dimen/calendar_week_text_size" />
+        </LinearLayout>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/calendar_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:paddingLeft="@dimen/dp_20"
-        android:paddingRight="@dimen/dp_20">
+        android:background="@color/white">
 
     </android.support.v7.widget.RecyclerView>
 </LinearLayout>

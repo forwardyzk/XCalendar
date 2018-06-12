@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -8,15 +9,23 @@
         android:id="@+id/plan_time_txt_month"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp_10"
-        android:layout_marginLeft="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_10"
-        android:text="Aug 2017"
-        android:textColor="@color/bg_color_calendar_blue"
-        android:textSize="@dimen/txt_16" />
+        android:layout_marginBottom="@dimen/calendar_day_year_month_margin"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="@dimen/calendar_day_year_month_margin"
+        android:paddingLeft="@dimen/calendar_week_margin_left_right"
+        android:textColor="@color/calendar_ok_text_color"
+        android:textSize="@dimen/calendar_default_text_size"
+        tools:text="Aug 2017" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/plan_time_recycler_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/calendar_week_margin_left_right"
+        android:paddingRight="@dimen/calendar_week_margin_left_right"></android.support.v7.widget.RecyclerView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/calendar_bg_line_color" />
 </LinearLayout>

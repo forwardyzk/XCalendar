@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <corners android:bottomLeftRadius="@dimen/dp_20"
-        android:topLeftRadius="@dimen/dp_20"
+    <corners android:bottomLeftRadius="@dimen/calendar_bg_day_selected_radius"
+        android:topLeftRadius="@dimen/calendar_bg_day_selected_radius"
         ></corners>
-    <solid android:color="@color/bg_color_calendar_blue"></solid>
+    <solid android:color="@color/calendar_bg_day_selected_color"></solid>
 </shape>
