@@ -41,6 +41,7 @@ public class CalendarView extends LinearLayout {
     }
 
 
+    private View calendar_other;
     private TextView calendar_cancle;
     private TextView calendar_show_days;
     private TextView calendar_ok;
@@ -52,6 +53,7 @@ public class CalendarView extends LinearLayout {
     private ArrayList<PlanTimeEntity> mYearMonthDatas;
 
     private void initView() {
+        calendar_other = findViewById(R.id.calendar_other);
         calendar_cancle = (TextView) findViewById(R.id.calendar_cancle);
         calendar_show_days = (TextView) findViewById(R.id.calendar_show_days);
         calendar_ok = (TextView) findViewById(R.id.calendar_ok);
@@ -66,6 +68,14 @@ public class CalendarView extends LinearLayout {
         calendar_recycler.setLayoutManager(layoutManager);
 
         calendar_cancle.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mlistener) {
+                    mlistener.clickBack();
+                }
+            }
+        });
+        calendar_other.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mlistener) {
@@ -274,9 +284,9 @@ public class CalendarView extends LinearLayout {
             String twoDay = CalendarUtil.getTwoDay(endDayStr, startDayStr);
 
             int daysCount = Integer.parseInt(twoDay);
-            calendar_show_days.setText("已选择" + (daysCount + 1) + "天");
+            calendar_show_days.setText("已选" + (daysCount + 1) + "天");
         } else {
-            calendar_show_days.setText("已选择0天");
+            calendar_show_days.setText("已选0天");
         }
 
 

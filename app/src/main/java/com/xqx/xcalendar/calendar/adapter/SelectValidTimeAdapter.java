@@ -7,17 +7,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.xqx.xcalendar.R;
-import com.xqx.xcalendar.calendar.CalendarUtil;
 import com.xqx.xcalendar.calendar.entity.SelectDayEntity;
 import com.xqx.xcalendar.calendar.listener.ClickDayListener;
 import com.xqx.xcalendar.calendar.listener.DayListener;
 import com.xqx.xcalendar.calendar.utils.CalendarEntityStringUtils;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 
 /**
@@ -143,9 +140,15 @@ public class SelectValidTimeAdapter extends RecyclerView.Adapter<SelectValidTime
                 !CalendarEntityStringUtils.justDayEmpty(endDay) &&
                 CalendarEntityStringUtils.entityToInt(selectDayEntity) >= CalendarEntityStringUtils.entityToInt(startDay) &&
                 CalendarEntityStringUtils.entityToInt(selectDayEntity) <= CalendarEntityStringUtils.entityToInt(endDay)) {
-            //处于开始和结束时间之间
-            holder.select_ly_day.setBackgroundResource(R.color.calendar_bg_day_selected_color);
-            holder.select_txt_day.setTypeface(Typeface.SANS_SERIF, Typeface.NORMAL);
+            if (selectDayEntity.getDay() != 0) {
+                //处于开始和结束时间之间
+                holder.select_ly_day.setBackgroundResource(R.color.calendar_bg_day_selected_color);
+                holder.select_txt_day.setTypeface(Typeface.SANS_SERIF, Typeface.NORMAL);
+            } else {
+                holder.select_ly_day.setBackgroundResource(android.R.color.transparent);
+            }
+
+
         } else {
             if (selectDayEntity.getYear() == mCurrentSystemDay.getYear()
                     && selectDayEntity.getMonth() == mCurrentSystemDay.getMonth()

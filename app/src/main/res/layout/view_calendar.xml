@@ -4,6 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
+    <View
+        android:id="@+id/calendar_other"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="#1A000000" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="已选择0天"
+                android:text="已选0天"
                 android:textColor="@color/calendar_default_text_color"
                 android:textSize="@dimen/calendar_default_text_size" />
 
