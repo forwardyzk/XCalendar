@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -18,8 +17,10 @@ import com.xqx.xcalendar.calendar.entity.SelectDayEntity;
 import com.xqx.xcalendar.calendar.listener.CalendarViewListener;
 import com.xqx.xcalendar.calendar.listener.ClickDayListener;
 import com.xqx.xcalendar.calendar.listener.DayListener;
+import com.xqx.xcalendar.calendar.utils.CalendarEntityStringUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * 日历选择范围--View
@@ -47,7 +48,7 @@ public class CalendarView extends LinearLayout {
     private TextView calendar_end_day;           //结束时间
 
     private RecyclerView calendar_recycler;
-    private ValidTimeAdapter adapter;
+    private ValidTimeAdapter mYearMonthAdapter;
     private ArrayList<PlanTimeEntity> mYearMonthDatas;
 
     private void initView() {
@@ -77,27 +78,36 @@ public class CalendarView extends LinearLayout {
             public void onClick(View v) {
 
 
-                if (justDayEmpty(mStartDay)) {
+                if (CalendarEntityStringUtils.justDayEmpty(mStartDay)) {
                     Toast.makeText(mContext, "请选择开始时间", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (justDayEmpty(mEndDay)) {
+                if (CalendarEntityStringUtils.justDayEmpty(mEndDay)) {
                     Toast.makeText(mContext, "请选择结束时间", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (null != mlistener) {
-                    String mStartDayStr = entityToStringFormat(mStartDay);
-                    String mEndDayStr = entityToStringFormat(mEndDay);
+                    String mStartDayStr = CalendarEntityStringUtils.entityToStringFormat(mStartDay);
+                    String mEndDayStr = CalendarEntityStringUtils.entityToStringFormat(mEndDay);
                     mlistener.clickOk(mStartDayStr + "~" + mEndDayStr, mStartDayStr, mEndDayStr);
                 }
             }
         });
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH) + 1;
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        mCurrentSystemDay = new SelectDayEntity();
+        mCurrentSystemDay.setYear(year);
+        mCurrentSystemDay.setMonth(month);
+        mCurrentSystemDay.setDay(day);
     }
 
 
     public static SelectDayEntity mStartDay;
     public static SelectDayEntity mEndDay;
+    public static SelectDayEntity mCurrentSystemDay;
 
     /**
      * @param currentStartTime 当前选中的开始时间2015-01-01
@@ -106,10 +116,10 @@ public class CalendarView extends LinearLayout {
      * @param rangEndTime      日期展示的结束的时间 2018-09
      */
     public void setData(String currentStartTime, String currentEndTime, String rangStarTime, String rangEndTime) {
-        int[] currentStartArray = stringToArrayYearMonthDay(currentStartTime);
-        int[] currentEndArray = stringToArrayYearMonthDay(currentEndTime);
-        int[] rangStarArray = stringToArrayYearMonth(rangStarTime);
-        int[] rangEndArray = stringToArrayYearMonth(rangEndTime);
+        int[] currentStartArray = CalendarEntityStringUtils.stringToArrayYearMonthDay(currentStartTime);
+        int[] currentEndArray = CalendarEntityStringUtils.stringToArrayYearMonthDay(currentEndTime);
+        int[] rangStarArray = CalendarEntityStringUtils.stringToArrayYearMonth(rangStarTime);
+        int[] rangEndArray = CalendarEntityStringUtils.stringToArrayYearMonth(rangEndTime);
         setData(currentStartArray[0], currentStartArray[1], currentStartArray[2],
                 currentEndArray[0], currentEndArray[1], currentEndArray[2],
                 rangStarArray[0], rangStarArray[1],
@@ -135,19 +145,47 @@ public class CalendarView extends LinearLayout {
         mEndDay = new SelectDayEntity(currentEndDay, currentEndMonth, currentEndYear);
         setShowStatAndEndDay(mStartDay, mEndDay);
         setYearMonthRange(startRangeYear, startRangeMonth, endRangeYear, endRangeMonth);
-        adapter = new ValidTimeAdapter(mYearMonthDatas, mContext);
+        mYearMonthAdapter = new ValidTimeAdapter(mYearMonthDatas, mContext);
         //设置开始和结束时间再设置适配器之前
-        adapter.setClickDayListener(dayListener, new ClickDayListener() {
+        mYearMonthAdapter.setClickDayListener(dayListener, new ClickDayListener() {
             @Override
             public void clickDay(SelectDayEntity startDay, SelectDayEntity endDay) {
-                adapter.notifyDataSetChanged();
+                mYearMonthAdapter.notifyDataSetChanged();
                 mStartDay = startDay;
                 mEndDay = endDay;
                 setShowStatAndEndDay(startDay, endDay);
             }
         });
-        calendar_recycler.setAdapter(adapter);
+        calendar_recycler.setAdapter(mYearMonthAdapter);
+
+        for (int i = 0; i < mYearMonthDatas.size(); i++) {
+            if (mDefaultSelectedPosition == -1) {
+                PlanTimeEntity planTimeEntity = mYearMonthDatas.get(i);
+                //1.如果开始日期为null,那么就寻找系统时间
+                if (CalendarEntityStringUtils.justDayEmpty(mStartDay)) {
+                    if (mCurrentSystemDay.getYear() == planTimeEntity.getYear() &&
+                            mCurrentSystemDay.getMonth() == planTimeEntity.getMonth()) {
+                        mDefaultSelectedPosition = i;
+                        break;
+                    }
+                } else {
+                    //2.开始时间日期不为null
+                    if (mStartDay.getYear() == planTimeEntity.getYear() &&
+                            mStartDay.getMonth() == planTimeEntity.getMonth()) {
+                        mDefaultSelectedPosition = i;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (mDefaultSelectedPosition != -1) {
+//            calendar_recycler.smoothScrollToPosition(mDefaultSelectedPosition);
+            calendar_recycler.scrollToPosition(mDefaultSelectedPosition);
+        }
     }
+
+    private int mDefaultSelectedPosition = -1;
 
 
     /**
@@ -207,26 +245,31 @@ public class CalendarView extends LinearLayout {
         public SelectDayEntity getEndDay() {
             return mEndDay;
         }
+
+        @Override
+        public SelectDayEntity getSystemDay() {
+            return mCurrentSystemDay;
+        }
     };
 
     private void setShowStatAndEndDay(SelectDayEntity startDay, SelectDayEntity endDay) {
-        if (justDayEmpty(endDay)) {
+        if (CalendarEntityStringUtils.justDayEmpty(endDay)) {
             calendar_end_day.setText("结束日期");
         } else {
-            String s = entityToStringShow(endDay);
+            String s = CalendarEntityStringUtils.entityToStringShow(endDay);
             calendar_end_day.setText(s);
         }
-        if (justDayEmpty(startDay)) {
+        if (CalendarEntityStringUtils.justDayEmpty(startDay)) {
             calendar_start_day.setText("开始日期");
         } else {
-            String s = entityToStringShow(startDay);
+            String s = CalendarEntityStringUtils.entityToStringShow(startDay);
             calendar_start_day.setText(s);
         }
 
 
-        if (!justDayEmpty(startDay) && !justDayEmpty(endDay)) {
-            String startDayStr = entityToStringFormat(startDay);
-            String endDayStr = entityToStringFormat(endDay);
+        if (!CalendarEntityStringUtils.justDayEmpty(startDay) && !CalendarEntityStringUtils.justDayEmpty(endDay)) {
+            String startDayStr = CalendarEntityStringUtils.entityToStringFormat(startDay);
+            String endDayStr = CalendarEntityStringUtils.entityToStringFormat(endDay);
 
             String twoDay = CalendarUtil.getTwoDay(endDayStr, startDayStr);
 
@@ -243,122 +286,6 @@ public class CalendarView extends LinearLayout {
 
     public void setCalendarViewListener(CalendarViewListener listener) {
         this.mlistener = listener;
-    }
-
-    /**
-     * 判断时间是否为空
-     *
-     * @param entity
-     * @return
-     */
-    private boolean justDayEmpty(SelectDayEntity entity) {
-        if (null == entity || entity.getYear() == -1 || entity.getMonth() == -1 || entity.getDay() == -1) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * bean类转化为字符串,格式化:2010-01-04
-     *
-     * @param dayEntity
-     * @return
-     */
-    private String entityToStringFormat(SelectDayEntity dayEntity) {
-        return dayEntity.getYear() + "-" + dayEntity.getMonth() + "-" + dayEntity.getDay();
-    }
-
-    /**
-     * bean类转化为字符串,展示,2019年01月06日
-     *
-     * @param dayEntity
-     * @return
-     */
-    private String entityToStringShow(SelectDayEntity dayEntity) {
-        return dayEntity.getYear() + "年" + dayEntity.getMonth() + "月" + dayEntity.getDay() + "日";
-    }
-
-    /**
-     * 字符串转化为年月日数组[年,月,日]
-     *
-     * @param time
-     * @return
-     */
-    private int[] stringToArrayYearMonthDay(String time) {
-        int[] array = new int[]{-1, -1, -1};
-        if (TextUtils.isEmpty(time)) {
-            return array;
-        }
-        String[] split = time.split("-");
-        if (split.length != 3) {
-            return array;
-        }
-        try {
-            int year = Integer.parseInt(split[0]);
-            int month = Integer.parseInt(split[1]);
-            int day = Integer.parseInt(split[2]);
-            array[0] = year;
-            array[1] = month;
-            array[2] = day;
-        } catch (Exception e) {
-
-        }
-        return array;
-
-    }
-
-    /**
-     * 字符串转化为年月数组[年,月]
-     *
-     * @param time
-     * @return
-     */
-    private int[] stringToArrayYearMonth(String time) {
-        int[] array = new int[]{-1, -1};
-        if (TextUtils.isEmpty(time)) {
-            return array;
-        }
-        String[] split = time.split("-");
-        if (split.length != 2) {
-            return array;
-        }
-        try {
-            int year = Integer.parseInt(split[0]);
-            int month = Integer.parseInt(split[1]);
-            array[0] = year;
-            array[1] = month;
-        } catch (Exception e) {
-
-        }
-        return array;
-
-    }
-
-
-    /**
-     * 字符串转化为bean类
-     *
-     * @param time
-     * @return
-     */
-    private SelectDayEntity stringToEntity(String time) {
-        if (TextUtils.isEmpty(time)) {
-            return new SelectDayEntity(-1, -1, -1);
-        }
-        String[] split = time.split("-");
-        if (split.length != 3) {
-            return new SelectDayEntity(-1, -1, -1);
-        }
-        try {
-            int year = Integer.parseInt(split[0]);
-            int month = Integer.parseInt(split[1]);
-            int day = Integer.parseInt(split[2]);
-            return new SelectDayEntity(day, month, year);
-        } catch (Exception e) {
-
-        }
-        return new SelectDayEntity(-1, -1, -1);
-
     }
 
 }

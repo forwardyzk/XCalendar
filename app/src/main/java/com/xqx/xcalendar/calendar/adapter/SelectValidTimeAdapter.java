@@ -14,6 +14,7 @@ import com.xqx.xcalendar.calendar.CalendarUtil;
 import com.xqx.xcalendar.calendar.entity.SelectDayEntity;
 import com.xqx.xcalendar.calendar.listener.ClickDayListener;
 import com.xqx.xcalendar.calendar.listener.DayListener;
+import com.xqx.xcalendar.calendar.utils.CalendarEntityStringUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,15 +35,6 @@ public class SelectValidTimeAdapter extends RecyclerView.Adapter<SelectValidTime
     public SelectValidTimeAdapter(ArrayList<SelectDayEntity> mMonthOfDaysData, Context context) {
         this.mMonthOfDaysData = mMonthOfDaysData;
         this.context = context;
-        Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH) + 1;
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        mCurrentSystemDay = new SelectDayEntity();
-        mCurrentSystemDay.setYear(year);
-        mCurrentSystemDay.setMonth(month);
-        mCurrentSystemDay.setDay(day);
-
     }
 
     private ClickDayListener mListener;
@@ -53,6 +45,7 @@ public class SelectValidTimeAdapter extends RecyclerView.Adapter<SelectValidTime
         this.mDayListener = dayListener;
         startDay = mDayListener.getStartDay();
         endDay = mDayListener.getEndDay();
+        mCurrentSystemDay = mDayListener.getSystemDay();
         Log.d("-000--", mMonthOfDaysData.size() + "-Holder开始时间:" + startDay.toString() + "结束时间:" + endDay.toString());
 
     }
@@ -94,9 +87,9 @@ public class SelectValidTimeAdapter extends RecyclerView.Adapter<SelectValidTime
                 //2.2如果选中的时间大于等于开始时间,那么当前时间赋给结束时间
                 //3.如果开始时间和结束时间都选中了,那么就把当前时间赋给开始时间,把结束时间置为空
 
-                if (justDayEmpty(startDay)) {
+                if (CalendarEntityStringUtils.justDayEmpty(startDay)) {
                     startDay = selectDayEntity;
-                } else if (justDayEmpty(endDay)) {
+                } else if (CalendarEntityStringUtils.justDayEmpty(endDay)) {
                     if (selectDayEntity.getYear() < startDay.getYear()) {
                         startDay = selectDayEntity;
                     } else if (selectDayEntity.getYear() == startDay.getYear()
@@ -113,18 +106,19 @@ public class SelectValidTimeAdapter extends RecyclerView.Adapter<SelectValidTime
                     startDay = selectDayEntity;
                     endDay = new SelectDayEntity(-1, -1, -1);
                 }
+//
+//                String selectDayString = selectDayEntity.getYear() + "-" + selectDayEntity.getMonth() + "-" + selectDayEntity.getDay();
+//                String startDayString = startDay.getYear() + "-" + startDay.getMonth() + "-" + startDay.getDay();
+//
+//
+//                String twoDay = CalendarUtil.getTwoDay(selectDayString, startDayString);
+//                int gapDate = Integer.parseInt(twoDay);
+//
+//                if (gapDate > allowTime) {
+//                    Toast.makeText(context, "结束日期距离开始日期不能超过" + (allowTime + 1) + "天", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
 
-                String selectDayString = selectDayEntity.getYear() + "-" + selectDayEntity.getMonth() + "-" + selectDayEntity.getDay();
-                String startDayString = startDay.getYear() + "-" + startDay.getMonth() + "-" + startDay.getDay();
-
-
-                String twoDay = CalendarUtil.getTwoDay(selectDayString, startDayString);
-                int gapDate = Integer.parseInt(twoDay);
-
-                if (gapDate > allowTime) {
-                    Toast.makeText(context, "结束日期距离开始日期不能超过" + (allowTime + 1) + "天", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 if (null != mListener) {
                     mListener.clickDay(startDay, endDay);
                 }
@@ -145,7 +139,10 @@ public class SelectValidTimeAdapter extends RecyclerView.Adapter<SelectValidTime
             //结束点
             holder.select_ly_day.setBackgroundResource(R.drawable.bg_calendar_time_end);
             holder.select_txt_day.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
-        } else if (!justDayEmpty(startDay) && !justDayEmpty(endDay) && entityToInt(selectDayEntity) >= entityToInt(startDay) && entityToInt(selectDayEntity) <= entityToInt(endDay)) {
+        } else if (!CalendarEntityStringUtils.justDayEmpty(startDay) &&
+                !CalendarEntityStringUtils.justDayEmpty(endDay) &&
+                CalendarEntityStringUtils.entityToInt(selectDayEntity) >= CalendarEntityStringUtils.entityToInt(startDay) &&
+                CalendarEntityStringUtils.entityToInt(selectDayEntity) <= CalendarEntityStringUtils.entityToInt(endDay)) {
             //处于开始和结束时间之间
             holder.select_ly_day.setBackgroundResource(R.color.calendar_bg_day_selected_color);
             holder.select_txt_day.setTypeface(Typeface.SANS_SERIF, Typeface.NORMAL);
@@ -174,40 +171,4 @@ public class SelectValidTimeAdapter extends RecyclerView.Adapter<SelectValidTime
     }
 
 
-    /**
-     * 判断时间是否为空
-     *
-     * @param entity
-     * @return
-     */
-    private boolean justDayEmpty(SelectDayEntity entity) {
-        if (null == entity || entity.getYear() == -1 || entity.getMonth() == -1 || entity.getDay() == -1) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * 将日期转化为int值
-     *
-     * @param entity
-     * @return
-     */
-    private int entityToInt(SelectDayEntity entity) {
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(entity.getYear());
-        if (entity.getMonth() < 10) {
-            stringBuffer.append("0").append(entity.getMonth());
-        } else {
-            stringBuffer.append(entity.getMonth());
-        }
-        if (entity.getDay() < 10) {
-            stringBuffer.append("0").append(entity.getDay());
-        } else {
-            stringBuffer.append(entity.getDay());
-        }
-
-        return Integer.parseInt(stringBuffer.toString());
-
-    }
 }

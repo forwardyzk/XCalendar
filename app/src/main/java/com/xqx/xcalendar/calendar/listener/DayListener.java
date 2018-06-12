@@ -10,4 +10,6 @@ public interface DayListener {
     SelectDayEntity getStartDay();
 
     SelectDayEntity getEndDay();
+
+    SelectDayEntity getSystemDay();
 }

@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
                 CalendarView calendarView = new CalendarView(MainActivity.this);
                 calendarView.setData(mStartDay, mEndDay,
-                        "2017-10", "2019-12");
+                        "2015-01", "2020-12");
 //                calendarView.setData("2018-06-20", "2018-06-25",
 //                        "2017-10", "2019-12");
                 CommonDialog.create(getSupportFragmentManager())

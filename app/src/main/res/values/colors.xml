@@ -7,7 +7,7 @@
     <color name="color_calendar_default">#3d3d3d</color>
     <color name="white">#fff</color>
 
-    <color name="calendar_bg_line_color">#f2f4f7</color>
+    <color name="calendar_bg_line_color">#E6E6E6</color>
     <color name="calendar_bg_color_top">#F4F4F4</color>
     <color name="calendar_default_text_color">#000000</color>
     <color name="calendar_ok_text_color">#FA6C00</color>
